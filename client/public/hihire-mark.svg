@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 100" role="img" aria-labelledby="logo-title">
+  <title id="logo-title">HiHire</title>
+  <defs>
+    <mask id="hi-cutout" x="0" y="0" width="104" height="100" maskUnits="userSpaceOnUse">
+      <rect width="104" height="100" fill="#fff"/>
+      <path d="M43 54h5v8h8v-8h5v22h-5v-9h-8v9h-5zm23 7h5v15h-5zm0-7h5v5h-5z" fill="#000"/>
+    </mask>
+  </defs>
+  <path d="M29 15c-5 3-9 8-11 14M21 8C14 12 8 19 5 27"
+        fill="none" stroke="#047857" stroke-width="4" stroke-linecap="round"/>
+  <path d="M40 86C34 82 29 76 25 69L15 54a6 6 0 0 1 10-7l11 13V25a6 6 0 0 1 12 0v16h3V14a6 6 0 0 1 12 0v27h3V20a6 6 0 0 1 12 0v23h3V32a6 6 0 0 1 12 0v27c0 21-12 34-31 34-9 0-16-2-22-7Z"
+        fill="#047857" mask="url(#hi-cutout)" transform="rotate(-11 56 53)"/>
+</svg>
