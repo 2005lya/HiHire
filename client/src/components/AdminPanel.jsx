@@ -10,8 +10,6 @@ const primaryButtonClass = buttonClass + ' bg-emerald-700 text-white enabled:hov
 const secondaryButtonClass = buttonClass + ' border border-slate-300 bg-white text-slate-800 enabled:hover:bg-slate-100';
 const cancelButtonClass = buttonClass + ' border border-red-200 text-red-700 enabled:hover:bg-red-50';
 const errorClass = 'rounded-none bg-red-50 p-3 text-sm text-red-800';
-const tableHeadingClass = 'px-4 py-3 font-semibold';
-const tableCellClass = 'px-4 py-3 align-top';
 
 const initialForm = {
   name: '',
@@ -233,73 +231,66 @@ export default function AdminPanel({ products, today }) {
       <section aria-labelledby="bookings-heading" className={cardClass}>
         <h2 id="bookings-heading" className="mb-4 text-xl font-semibold">Bookings</h2>
 
-        <div
-          role="region"
-          aria-labelledby="bookings-heading"
-          tabIndex={0}
-          className="overflow-x-auto rounded-none border border-slate-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-        >
-          <table className="w-full border-collapse text-left text-sm">
-            <thead className="bg-slate-100 text-slate-700">
-              <tr>
-                {['Customer', 'Phone', 'Email', 'Tool', 'Dates', 'Pickup', 'Rental', 'Deposit', 'Status', 'Action'].map(
-                  (heading) => <th key={heading} scope="col" className={tableHeadingClass}>{heading}</th>
-                )}
-              </tr>
-            </thead>
+        {bookings.length === 0 ? (
+          <p className="border border-slate-200 px-4 py-8 text-center text-slate-600">
+            No bookings found.
+          </p>
+        ) : (
+          <ul className="grid gap-4 lg:grid-cols-2">
+            {bookings.map((booking) => {
+              const details = [
+                ['Dates', booking.startDate === booking.endDate
+                  ? booking.startDate
+                  : `${booking.startDate} to ${booking.endDate}`],
+                ['Pickup', booking.pickupTime],
+                ['Phone', booking.phone || '—'],
+                ['Email', booking.email || '—'],
+                ['Rental', `${booking.currency} ${booking.rentalCost}`],
+                ['Deposit', `${booking.currency} ${booking.deposit}`]
+              ];
+              const isConfirmed = booking.status === 'confirmed';
 
-            <tbody className="divide-y divide-slate-200">
-              {bookings.map((booking) => (
-                <tr key={booking.id} className="hover:bg-slate-50">
-                  <td className={tableCellClass + ' font-medium'}>{booking.name}</td>
-                  <td className={tableCellClass + ' whitespace-nowrap'}>{booking.phone || '—'}</td>
-                  <td className={tableCellClass}>{booking.email || '—'}</td>
-                  <td className={tableCellClass}>{booking.productName}</td>
-                  <td className={tableCellClass + ' whitespace-nowrap'}>
-                    {booking.startDate} to {booking.endDate}
-                  </td>
-                  <td className={tableCellClass}>{booking.pickupTime}</td>
-                  <td className={tableCellClass + ' whitespace-nowrap'}>
-                    {booking.currency} {booking.rentalCost}
-                  </td>
-                  <td className={tableCellClass + ' whitespace-nowrap'}>
-                    {booking.currency} {booking.deposit}
-                  </td>
-                  <td className={tableCellClass}>
+              return (
+                <li key={booking.id} className="flex min-w-0 flex-col gap-4 border border-slate-200 p-4">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="min-w-0 wrap-anywhere">
+                      <h3 className="font-semibold text-slate-900">{booking.name}</h3>
+                      <p className="text-sm text-slate-700">{booking.productName}</p>
+                    </div>
                     <span className={
-                      'inline-block rounded-none px-2.5 py-1 text-xs font-medium capitalize ' +
-                      (booking.status === 'confirmed'
-                        ? 'bg-emerald-100 text-emerald-900'
-                        : 'bg-slate-100 text-slate-700')
+                      'px-2.5 py-1 text-xs font-medium capitalize ' +
+                      (isConfirmed ? 'bg-emerald-100 text-emerald-900' : 'bg-slate-100 text-slate-700')
                     }>
                       {booking.status}
                     </span>
-                  </td>
-                  <td className={tableCellClass}>
-                    {booking.status === 'confirmed' && (
+                  </div>
+
+                  <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                    {details.map(([label, value]) => (
+                      <div key={label} className="min-w-0 wrap-anywhere">
+                        <dt className="text-slate-600">{label}</dt>
+                        <dd className="mt-0.5 font-medium text-slate-900">{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+
+                  {isConfirmed && (
+                    <div className="mt-auto border-t border-slate-200 pt-3">
                       <button
                         type="button"
-                        className={cancelButtonClass + ' whitespace-nowrap'}
+                        className={cancelButtonClass}
                         disabled={busy}
                         onClick={() => handleCancel(booking)}
                       >
                         Cancel booking
                       </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-
-              {bookings.length === 0 && (
-                <tr>
-                  <td colSpan={10} className="px-4 py-8 text-center text-slate-600">
-                    No bookings found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </section>
 
       <section aria-labelledby="manual-booking-heading" className={cardClass}>

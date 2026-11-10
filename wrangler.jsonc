@@ -15,7 +15,7 @@
             "binding": "DB",
             "database_name": "hihire-bookings",
             // Local development ID. Replace with the ID from wrangler d1 create before publishing.
-            "database_id": "00000000-0000-0000-0000-000000000000",
+            "database_id": "ae7af835-9a82-4ddf-bba0-15f2225fe29d",
             "migrations_dir": "./database/migrations"
         }
     ]
